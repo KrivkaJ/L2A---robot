@@ -16,23 +16,5 @@ void setup() {
     // Upravte nastavení, například:
     // cfg.motor_max_power_pct = 30; // limit výkonu motorů na 30%
     rkSetup(cfg);          
-    while(true){
-        rkMotorsDriveAsync(950,950,speed);
-
-         turn_right();
-    
-          rkMotorsDriveAsync(300,300,speed);
-         
-           turn_right();
-
-          rkMotorsDriveAsync(500,500,speed);
-              turn_left();
-
-               rkMotorsDriveAsync(500,500,speed);
-         
-                turn_left();
-        
-               rkMotorsDriveAsync(1000,1000,speed);
-         
-    }
+    rkMotorsDrive(4000, 4000, 30000);
 }
