@@ -6,3 +6,4 @@
 .gridui_mtime
 src/config.hpp
 data
+.pio/
