@@ -2,7 +2,6 @@
 #include "robotka.h"
 
 int speed = 30;
-float coefSpeed = 1.085; // pravy motor je pomalejsi, takze se jeho rychlost musi nasobit touto konstantou 
 float ticksToMm = 3.62; // prepocet z tiku v enkoderech na mm 
 byte state = 1;
 float rozpeti_kol = 165;
@@ -57,11 +56,11 @@ void setup() {
     turn(180);
     forward(1000); 
     turn(90);
-    forward(500);
+    forward(450);
     turn(90);
     forward(500);
     turn(-90);
-    forward(450);
+    forward(400);
     turn(-90);
     forward(850);
 
