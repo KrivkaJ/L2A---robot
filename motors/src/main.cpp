@@ -25,6 +25,17 @@ void encodery(){
     // rkMotorsGetPositionRight();
 
 }
+void Skoback(){
+    forward(1000); 
+    turn(90);
+    forward(450);
+    turn(90);
+    forward(500);
+    turn(-90);
+    forward(400);
+    turn(-90);
+    forward(850);
+}
 
 void Sko(){
     forward(850);
@@ -54,14 +65,6 @@ void setup() {
 
     Sko();
     turn(180);
-    forward(1000); 
-    turn(90);
-    forward(450);
-    turn(90);
-    forward(500);
-    turn(-90);
-    forward(400);
-    turn(-90);
-    forward(850);
+    Skoback();
 
 }
