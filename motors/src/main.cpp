@@ -50,10 +50,23 @@ void Sko(){
     forward(1000); 
 }
 
+<<<<<<< Updated upstream
 void update_sensors(){
     g_US = rkUltraMeasure(1);
     printf("n/ g_US: %f /n", g_US);
     std::cout << " " << std::endl;
+=======
+void Sko_reversed(){
+    forward(1000); 
+    turn(90);
+    forward(500);
+    turn(90);
+    forward(500);
+    turn(-90);
+    forward(450);
+    turn(-90);
+    forward(850);
+>>>>>>> Stashed changes
 }
 
 // Funkce setup se zavolá vždy po startu robota.
@@ -77,6 +90,10 @@ void setup() {
 
     Sko();
     turn(180);
+<<<<<<< Updated upstream
     Skoback();
 
+=======
+    Sko_reversed();
+>>>>>>> Stashed changes
 }
