@@ -1,10 +1,11 @@
 //program na projeti eska
 #include "robotka.h"
 
-int speed = 30;
+const int speed = 30;
 float ticksToMm = 3.62; // prepocet z tiku v enkoderech na mm 
 byte state = 1;
 float rozpeti_kol = 165;
+float g_US = 1;
 
 
 void forward(int mm){ // 
@@ -38,6 +39,12 @@ void Sko(){
     forward(1000); 
 }
 
+void update_sensors(){
+    g_US = rkUltraMeasure(1);
+    printf("n/ g_US: %f /n", g_US);
+    std::cout << " " << std::endl;
+}
+
 // Funkce setup se zavolá vždy po startu robota.
 void setup() {
     rkConfig cfg;
@@ -46,11 +53,16 @@ void setup() {
     rkSetup(cfg);   
            
     Serial.begin(115200);
+            
+            
     while(true){
         if(rkButtonIsPressed(BTN_UP)){
                 break;
         }
     }
+        while(true){
+            update_sensors();
+        }
 
     Sko();
     turn(180);
