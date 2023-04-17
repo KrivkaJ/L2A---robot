@@ -76,12 +76,22 @@ void setup() {
     servoBus.beginOnePinMode(&Serial2, 32); // 8 is the pin number
     servoBus.debug(true);
     servoBus.retry = 0;
+    
 
-    //while(true){
-    //    if(rkButtonIsPressed(BTN_UP)){
-    //            break;
-    //    }
-    //}
+    while(true){
+        if(rkButtonIsPressed(BTN_UP)){
+                break;
+        }
+    }
+    while(true){
+    Serial.printf("pos: %f", rkServosGetPosition(1));
+    rkServosSetPosition(1, 90);
+    sleep(2000);
+    Serial.printf("pos: %f", rkServosGetPosition(1));
+    rkServosSetPosition(1,-90);
+    sleep(2000);
+    Serial.printf("pos: %f", rkServosGetPosition(1));
+    }
     //    while(true){
     //        update_sensors();
     //    }
