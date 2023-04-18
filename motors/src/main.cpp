@@ -1,8 +1,12 @@
 //program na projeti eska
+#include "SmartServoBus.hpp"
 #include "robotka.h"
-#include <lx16a-servo.h>
-LX16ABus servoBus;
-LX16AServo servo(&servoBus, 1);
+#include <Arduino.h>
+
+using namespace lx16a;
+
+static int n = 0;
+static SmartServoBus servoBus;
 
 const int speed = 30;
 float ticksToMm = 3.62; // prepocet z tiku v enkoderech na mm
@@ -67,16 +71,16 @@ void Sko_reversed() {
 
 // Funkce setup se zavolá vždy po startu robota.
 void setup() {
+
+    servoBus.begin(1, UART_NUM_2, GPIO_NUM_14);
+
     rkConfig cfg;
     // Upravte nastavení, například:
     // cfg.motor_max_power_pct = 30; // limit výkonu motorů na 30%
     rkSetup(cfg);
 
     Serial.begin(115200);
-    servoBus.beginOnePinMode(&Serial2, 32); // 8 is the pin number
-    servoBus.debug(true);
-    servoBus.retry = 0;
-    
+  
 
     while(true){
         if(rkButtonIsPressed(BTN_UP)){
@@ -92,45 +96,41 @@ void setup() {
     sleep(2000);
     Serial.printf("pos: %f", rkServosGetPosition(1));
     }
-    //    while(true){
-    //        update_sensors();
-    //    }
-
-    Sko();
-    turn(180);
-    Skoback();
-
-    Sko_reversed();
+    while(true){
+        switch (state)
+        {
+        case 1: //projeti S
+            Sko();
+            state = 2;
+            break;
+        case 2: //hledani kostky
+        //rameno nastavit do polohy u zeme
+        //zahajit nahodnou jizdu a zaroven kontrola hodnoty ze senzoru na kostky
+        case 3: //uchopeni kostky s poznanim barvy
+        //barva check
+        //ochopeni a vyzvednuti do vysky
+        case 4: //polozeni kostky na spravnou barvu
+        case 5: //cesta ke konci S
+        case 6: //projeti S naopak
+        Sko_reversed();
+        state = 7;
+        default:
+            break;
+        }
+    }
 }
 
 void loop() {
-    int divisor = 4;
-    for (int i = 0; i < 1000 / divisor; i++) {
-        long start = millis();
-        uint16_t angle = i * 24 * divisor;
-        int16_t pos = 0;
-        pos = servo.pos_read();
-        Serial.printf("\n\nPosition at %d -> %s\n", pos,
-            servo.isCommandOk() ? "OK" : "\n\nERR!!\n\n");
+    uint16_t angle = (n % 240);
 
-        do {
-            servo.move_time(angle, 10 * divisor);
-        } while (!servo.isCommandOk());
-        Serial.printf("Move to %d -> %s\n", angle,
-            servo.isCommandOk() ? "OK" : "\n\nERR!!\n\n");
-        Serial.println("Voltage = " + String(servo.vin()));
-        Serial.println("Temp = " + String(servo.temp()));
-        Serial.println("ID  = " + String(servo.id_read()));
-        Serial.println("Motor Mode  = " + String(servo.readIsMotorMode()));
-        long took = millis() - start;
-        long time = (10 * divisor) - took;
-        if (time > 0)
-            delay(time);
-        else {
-            Serial.println("Real Time broken, took: " + String(took));
-        }
-    }
+    servoBus.set(0, Angle::deg(angle));
+    printf("Move to %d \n", angle);
 
-    servo.move_time(0, 3000);
-    delay(3000);
+    delay(500);
+
+    auto curPos = servoBus.pos(0);
+    printf("Position at %f \n", curPos.deg());
+
+    n += 15;
+    delay(1000);
 }
